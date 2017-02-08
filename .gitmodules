@@ -1,0 +1,3 @@
+[submodule "lib/NearPy"]
+	path = lib/NearPy
+	url = https://github.com/pixelogik/NearPy
