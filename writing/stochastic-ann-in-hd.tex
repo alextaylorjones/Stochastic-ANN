@@ -62,7 +62,8 @@ If the fraction of points with auxillary value $u$ is given by $f_x(u)$, then we
 % Here we begin to explore the relationship between the number of satisfying points for a given query and the running time.
 Here we sketch a simple algorithm to perform SANN with black box access to the algorithm of \cite[anodoni]. We then analyze the running time of our algorithm in the pathological case where every query has at most one satisfying output, with $x$ fraction having a satisfying stochastic site. Further, let's assume the goal of a user Alice is to construct her data structure, intending to perform $m$ unique queries as quickly as possible.
 
-Under these assumptions, we use the following data structure to answer queries of the form $(r,c,q,u)$.  For each $P_i$ create $n_i^{\rho + o_c(1)}$ independent data structures so that queries on this data structure will return a nearest neighbor (if one exists) with probability at least 0.99 (see remark 2.4 in \cite[andoni]). 
+Under these assumptions, we use the following data structure to answer queries of the form $(r,c,q,u)$.  For each $P_i$ we create $O(n_i^{\rho + o_c(1)})$ independent data structures so that queries on this data structure will return a nearest neighbor (if one exists) with probability at least 0.99 (see remark 2.4 in \cite[andoni]). Call this meta-data structure $Q_i$. For a given query, assume a subset  $S \subset \lbrace Q_i \rbrace_{i=1}^k$ can satisfy the auxillary requirements (if this is not true, return NO for this query). (*) Randomly select a previously unselected data structure in $S$ and perform the query. While no query point is returned, repeat (*) until all of $S$ is queried. Return a NO if all of $S$ is exhausted.
 
-Group all data structures $P_i$ where the sites satisfy the auxillary requirements of the query. Randomly select a previously unselected structure $P_j$ and query 
+\begin{claim}
+\end{claim}
 \end{document}
