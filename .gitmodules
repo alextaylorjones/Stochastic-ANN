@@ -1,3 +1,6 @@
 [submodule "lib/NearPy"]
 	path = lib/NearPy
 	url = https://github.com/pixelogik/NearPy
+[submodule "lib/mrpt-comparison"]
+	path = lib/mrpt-comparison
+	url = https://github.com/ejaasaari/mrpt-comparison

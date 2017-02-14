@@ -1,0 +1,68 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{bbm}
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows,automata}
+
+\author{Alex Jones, Neeraj Kumar, Isaac Mackey}
+\title{\vspace{-3em}Stochastic Approximate Nearest Neighbor in High Dimensions}
+
+% This document should be extended, rather than edited, upon finding new results. 
+
+\begin{document}
+\maketitle
+\begin{abstract}
+  We pose the approximate nearest neighbor problem in high dimensions with an auxillary stochastic requirement. This problem serves as a crucial primitive for the most likely neighbor problem in high dimensions and as a important problem on its own. We analyze the difficulty of this problem, and the efficacy of proposed solutions through theoretical and emprical methods.
+\end{abstract}
+\section{Introduction} 
+
+\subsection{Problem Definition}
+Consider a database of \textsl{stochastic sites} $P = \lbrace (p,u) \;:\; p \in \mathbb{R}^d, u \in [0,1] \rbrace$. These entries represent a location in high dimensional Euclidean space associated with an auxillary probability value meant to represent existence, risk, or other stochastic quantity of interest. A stochastic approximate neighbor query is a quadruplet $(r,c,q,u),\; r,c \in \mathbb{R}, q \in \mathbb{R}^d, u \in [0,1]$. A data structure which supports S-ANN queries will return a stochastic site $(p,v)$ such that $d(p,q) \leq cr$ and $v \geq u$ with a probability at least $f$ for some fixed $f$. Intuitively, this output is a ``nearby" point which also satisfies our auxillary requirement.
+
+\section{Solution Approaches}
+
+For an arbitrary query and database, we have no hope to improve upon the running time, preprocessing time or space of existing $ANN$, since queries of the form $(r,c,q,0)$ are identical to ANN queries. Our theoretical goal then is to assume limited information about the database and/or queries and improve preprocessing time, space or running time of an appropriate data structure.
+
+At our disposal is an ANN algorithm which has the following properties for arbitrary $n$ sized databases with dimension $d$ 
+\begin{itemize}
+  \item{Preprocessing Time - $O(d^a \cdot n^b)$}
+  \item{Space - $O(dn + n^c)$}
+  \item{Query Time - $O(d^e \cdot n^h)$}
+  \item{Probability of Success (at least) - $f_{success}$}
+\end{itemize}
+
+for suitable constants $a,b,c,e,h)$. For the recently developed LSH algorithm of \cite[Andoni - Optimal Data-dependent], we have in Theorem 2.3 that with probability $f_{success} = n^{-\rho - o_c(1)}$, the constants fall out as $a = d = 1$, $c = 1 + o_c(1)$, $b = 1 + o_c(1)$ and $h = o_c(1)$. In this section, we will use the constants of this algorithm when we consider black-box approaches.
+
+\subsection{Unique Probabilities}
+
+For simplicity, consider when $P$ contains $k$ unique values of $u$ over all stochastic sites, namely $u_1,...,u_k$, and let the number of entries in $P$ with existence value $u_i$ be $n_i$. As a naive approach, we can treat each equivalence class $P_i = \lbrace (p,u)\;:\; u = u_i \rbrace$ as a separate database. \paragraph{Known Query Distribution}
+A natural first question is the following: what is the expected number of entries of our database that are valid with respect to the auxillary requirement for a query drawn from $\mathcal{Q}$. Assume that all queries have identical values of $r,c$ and are drawn from the joint distribution $\mathcal{Q}$, whose marginal distribution of $ u \in [0,1]$ is given by $\mathcal{U}$. Imbibe the random variable $U$ with the marginal distribution of $\mathcal{U}$. 
+
+We say that a stochastic site $(p,u)$ \textsl{ satisfies the auxillary condition with respect to a query} $(r,c,q,u')$ when $u \geq u'$ Our question posed in the previous paragraph is then
+\begin{align}
+  \mathbb{E}_{\mathcal{Q}}\big[|\lbrace  s = (p,u) \;:\; s \text{ satisfies the query auxillary condition }\rbrace | \big]
+\end{align}
+
+where our randomness is taken over independent samples of $\mathcal{Q}$. Decomposing this, we get 
+\begin{align}
+  &\mathbb{E}_{\mathcal{Q}}\big[|\lbrace  s = (p,u) \;:\; s \text{ satisfies the query auxillary condition }\rbrace | \big]\\
+  & = \mathbb{P} \big\lbrace (p,u) \in P, u \geq u',(r,c,q,u') \leftarrow \mathcal{Q} \big\rbrace  \\
+  & = \sum_{i = 1}^k n_i \cdot F_U(u_i)\label{frac-final}
+\end{align}
+
+where $F_U$ is the distribution function of $U$. 
+%Add a figure here to demonstrate the two extremes? -- too simple?
+If the fraction of points with auxillary value $u$ is given by $f_x(u)$, then we can rewrite equation \ref{frac-final} as $\int_0^1 f_x(u)F_U(u) du$. This is maximized when the mass of $u$ in the dataset lies above all the mass of $U$, and our queries become ANN queries. This is minimized when all of $f_x(u)$ is exhausted before any mass of $U$ is used, and our queries become empty. Hence, it is interesting to consider performance of a black box type algorithm in between the two extremes.
+
+\subsection{Simple Algorithm and a Pathological Case Study}
+% Here we begin to explore the relationship between the number of satisfying points for a given query and the running time.
+Here we sketch a simple algorithm to perform SANN with black box access to the algorithm of \cite[anodoni]. We then analyze the running time of our algorithm in the pathological case where every query has at most one satisfying output, with $x$ fraction having a satisfying stochastic site. Further, let's assume the goal of a user Alice is to construct her data structure, intending to perform $m$ unique queries as quickly as possible.
+
+Under these assumptions, we use the following data structure to answer queries of the form $(r,c,q,u)$.  For each $P_i$ create $n_i^{\rho + o_c(1)}$ independent data structures so that queries on this data structure will return a nearest neighbor (if one exists) with probability at least 0.99 (see remark 2.4 in \cite[andoni]). 
+
+Group all data structures $P_i$ where the sites satisfy the auxillary requirements of the query. Randomly select a previously unselected structure $P_j$ and query 
+\end{document}
